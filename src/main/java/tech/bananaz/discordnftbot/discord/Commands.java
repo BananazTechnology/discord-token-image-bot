@@ -44,7 +44,7 @@ public class Commands implements MessageCreateListener {
 		Optional<ServerTextChannel> outputChannel = message.getServerTextChannel();
 		String cmdPrefix = this.config.getCommandPrefix();
 		// Don't even bother if message does not chart with char
-		if(parsedMsg.startsWith(cmdPrefix) && !sender.get().isYourself()) {
+		if(outputChannel.get().getIdAsString().equalsIgnoreCase(this.config.getChannelId()) && !sender.get().isYourself()) {
 			// Build internal message
 			EventMessage e = new EventMessage();
 			e.setChannel(outputChannel.get());
