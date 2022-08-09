@@ -1,0 +1,36 @@
+debug: true
+---
+app:
+  version: @project.version@
+---
+server:
+  port: 8089
+spring:
+  banner:
+    # Custom Banner
+    location: classpath:banner.txt
+---
+# Health check actuator
+management:
+  endpoints:
+    jmx:
+      exposure:
+        include: "*"
+    web:
+      exposure:
+        include: "*"
+---
+# Custom settings
+nft-bot:
+  custom:
+    - baseUrl: "https://pixelfellazgif.s3.us-east-1.amazonaws.com/left_static/"
+      command: "pixel"
+      fileFormat: ".png"
+      max: 10000
+    - baseUrl: "https://pixelfellazgif.s3.us-east-1.amazonaws.com/front_gif/"
+      command: "pixelgif"
+      fileFormat: ".gif"
+      max: 10000
+  discord:
+    prefix: "!"
+    token: ODg1MzE2NjE1MjEyNzY5Mjgx.YTlRWQ.Wz4efIUN3RX-_D1RlczaDJDIJQk
