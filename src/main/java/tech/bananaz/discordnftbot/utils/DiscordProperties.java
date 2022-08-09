@@ -21,16 +21,19 @@ public class DiscordProperties {
 	// Easy access to K/V pairs
 	private final String PREFIX     = "prefix";
 	private final String TOKEN_PAIR = "token";
+	private final String CHANNEL_ID = "channelId";
 	
 	// Filled with data at Runtime
 	private String  token;
 	private String  commandPrefix;
+	private String  channelId;
 
 	public void configureDiscordProperties(Map<Object, Object> discordInfo, ArrayList<CustomCommand> customInfo) throws RuntimeException {
 		// Store variable or use in the Discord interface
 		this.commandPrefix      = (String) discordInfo.get(PREFIX);
 		this.token          	= (String) discordInfo.get(TOKEN_PAIR);
-		if(isNull(this.commandPrefix) || isNull(this.token)) throw new RuntimeException("No 'prefix' and/or 'token' for discord");
+		this.channelId          = (String) discordInfo.get(CHANNEL_ID);
+		if(isNull(this.commandPrefix) || isNull(this.token) || isNull(this.channelId)) throw new RuntimeException("No 'prefix' and/or 'token' and/or 'channelId' for discord");
 		
 		this.discordBot.build(this, customInfo);
 	}

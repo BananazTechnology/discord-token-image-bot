@@ -36,6 +36,7 @@ nft-bot:
   discord:
     prefix: <Command prefix for all (Ex. "!")>
     token: <DISCORD-TOKEN>
+    channelId: <CHANNEL ID>
 
 (*) = is optional. DOES NOT NEED TO BE INCLUDED
 ```

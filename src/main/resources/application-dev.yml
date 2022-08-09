@@ -34,3 +34,4 @@ nft-bot:
   discord:
     prefix: "!"
     token: ODg1MzE2NjE1MjEyNzY5Mjgx.YTlRWQ.Wz4efIUN3RX-_D1RlczaDJDIJQk
+    channelId: "948751370842943548"
