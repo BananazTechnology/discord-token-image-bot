@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  discordTokenImageBot:
+    image: bananaztech/discord-token-image-bot:latest
+    container_name: discord-token-image-bot-prod
+    restart: always
+    stdin_open: true
+    tty: true
+    environment:
+      SPRING_APPLICATION_JSON: |-
+        {
+          "nft-bot": {
+            "custom": [
+              {
+                "baseUrl": "https://raw.githubusercontent.com/BananazTechnology/client-assets/main/mems/",
+                "fileFormat": ".png",
+                "command": "mem"
+              }
+            ],
+            "discord": {
+              "prefix": "!",
+              "token": "ODg1MzE2NjE1MjEyNzY5Mjgx.YTlRWQ.Wz4efIUN3RX-_D1RlczaDJDIJQk"
+            }
+          }
+        }
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c \"if [[ $$(tail -n 10 /tmp/nftBotRuntime.log | grep -cE '(Websocket)') -gt 5 ]]; then echo 1; else echo 0; fi\""]
+      interval: 60s
+      timeout: 30s
+      retries: 2
