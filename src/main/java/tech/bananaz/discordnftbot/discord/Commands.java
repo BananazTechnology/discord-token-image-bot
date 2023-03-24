@@ -67,7 +67,6 @@ public class Commands implements MessageCreateListener {
 					} catch (Exception ex) {
 						LOGGER.info("User {} failed parse of token id [{}]!", sender.get().getDiscriminatedName(), parsedMsg);
 					}
-					break;
 				}
 			}
 		}

@@ -31,7 +31,19 @@ nft-bot:
       command: "pixelgif"
       fileFormat: ".gif"
       max: 10000
+    - baseUrl: "https://ipfs.io/ipfs/bafybeidkqhbiyjlnnneab467eh2mabdf7lcdhmv6wgnd6peaq7hmfj3ez4/"
+      command: "fff"
+      fileFormat: ".png"
+      max: 10000
+    - baseUrl: "https://ipfs.io/ipfs/bafybeiep5n2kci72it4kny7rcvxryotlnp75ucz6wj4vkxu7orzkuqgbvu/"
+      command: "fff"
+      fileFormat: ".png"
+      max: 10000
+    - baseUrl: "https://ipfs.io/ipfs/bafybeih546bp5uwvco2zknvbpkmwds5l2q36yl6yq5vbdjjxdl55n6bvbq/"
+      command: "fff"
+      fileFormat: ".png"
+      max: 10000
   discord:
     prefix: "!"
     token: ODg1MzE2NjE1MjEyNzY5Mjgx.YTlRWQ.Wz4efIUN3RX-_D1RlczaDJDIJQk
-    channelId: "948751370842943548"
+    channelId: "1088876843291119769"
