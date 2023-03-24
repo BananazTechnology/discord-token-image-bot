@@ -1,6 +1,7 @@
 package tech.bananaz.discordnftbot.discord;
 
 import java.awt.Color;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.javacord.api.DiscordApi;
@@ -20,6 +21,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import tech.bananaz.discordnftbot.models.CustomCommand;
 import tech.bananaz.discordnftbot.models.EventMessage;
 import tech.bananaz.discordnftbot.utils.DiscordProperties;
+
+import static tech.bananaz.discordnftbot.utils.ImageUtils.*;
 
 @Component
 public class DiscordBot {
@@ -60,7 +63,12 @@ public class DiscordBot {
 									msg.getSelection(),
 									msg.getCommandInfo().getFileFormat());
 		
-		buildMessage(fullImageUrl).send(msg.getChannel());
+		try {
+			buildMessage(fullImageUrl).send(msg.getChannel());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void startupLogger() throws JsonProcessingException {
@@ -71,10 +79,10 @@ public class DiscordBot {
         LOGGER.info("--------");
 	}
 	
-	private MessageBuilder buildMessage(String imageUrl) {
+	private MessageBuilder buildMessage(String imageUrl) throws IOException {
 		MessageBuilder newMsg = new MessageBuilder();
 		EmbedBuilder   newEmbed = new EmbedBuilder();
-		newEmbed.setImage(imageUrl);
+		newEmbed.setImage(getImage(imageUrl));
 		newEmbed.setColor(MSG_COLOR);
 		newMsg.setEmbed(newEmbed);
 		return newMsg;

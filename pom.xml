@@ -12,7 +12,7 @@
 	
 	<groupId>tech.bananaz</groupId>
 	<artifactId>discord-token-image-bot</artifactId>
-	<version>2.0.0</version>
+	<version>3.0.0</version>
 	<name>discord-token-image-bot</name>
 	<description>A Discord bot made with javacord!</description>
 	
