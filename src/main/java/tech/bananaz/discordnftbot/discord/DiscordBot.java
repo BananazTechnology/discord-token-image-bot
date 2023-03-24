@@ -82,7 +82,11 @@ public class DiscordBot {
 	private MessageBuilder buildMessage(String imageUrl) throws IOException {
 		MessageBuilder newMsg = new MessageBuilder();
 		EmbedBuilder   newEmbed = new EmbedBuilder();
-		newEmbed.setImage(getImage(imageUrl));
+		if(imageUrl.contains(".gif")) {
+			newEmbed.setImage(imageUrl);
+		} else {
+			newEmbed.setImage(getImage(imageUrl));
+		}
 		newEmbed.setColor(MSG_COLOR);
 		newMsg.setEmbed(newEmbed);
 		return newMsg;
