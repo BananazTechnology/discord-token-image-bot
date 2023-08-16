@@ -1,9 +1,13 @@
 package tech.bananaz.discordnftbot.discord;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
+import java.util.Random;
+
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.message.MessageBuilder;
@@ -23,6 +27,7 @@ import tech.bananaz.discordnftbot.models.EventMessage;
 import tech.bananaz.discordnftbot.utils.DiscordProperties;
 
 import static tech.bananaz.discordnftbot.utils.ImageUtils.*;
+import static java.util.Objects.nonNull;
 
 @Component
 public class DiscordBot {
@@ -34,6 +39,9 @@ public class DiscordBot {
 	public static final String NEWLINE  = "\n";
 	public static final Color MSG_COLOR = Color.ORANGE;
 	private static final Logger LOGGER  = LoggerFactory.getLogger(DiscordBot.class);
+	private static final String IPFS_MAGIC_STRING = "%ipfs%";
+	// "cf-ipfs.com", 
+	private static final String[] IPFS_URLS = {"gateway.ipfs.io", "cloudflare-ipfs.com", "dweb.link", "gateway.pinata.cloud", "hardbin.com", "ipfs.runfission.com", "storry.tv"};
 	
 	/** Required */
 	private DiscordApi disc;
@@ -58,16 +66,12 @@ public class DiscordBot {
 	}
 	
 	public void sendEntry(EventMessage msg) {
-		String fullImageUrl = buildImageUrl(
-									msg.getCommandInfo().getBaseUrl(),
-									msg.getSelection(),
-									msg.getCommandInfo().getFileFormat());
-		
 		try {
-			buildMessage(fullImageUrl).send(msg.getChannel());
+			buildMessage(msg, null, null).send(msg.getChannel());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 	}
 	
@@ -79,20 +83,57 @@ public class DiscordBot {
         LOGGER.info("--------");
 	}
 	
-	private MessageBuilder buildMessage(String imageUrl) throws IOException {
-		MessageBuilder newMsg = new MessageBuilder();
-		EmbedBuilder   newEmbed = new EmbedBuilder();
-		if(imageUrl.contains(".gif")) {
-			newEmbed.setImage(imageUrl);
-		} else {
-			newEmbed.setImage(getImage(imageUrl));
-		}
-		newEmbed.setColor(MSG_COLOR);
-		newMsg.setEmbed(newEmbed);
-		return newMsg;
+	private MessageBuilder buildMessage(EventMessage msg, Optional<Integer> maxRetries, Optional<Integer> retryDelay) throws IOException {
+	    int retries = (nonNull(maxRetries)) ? maxRetries.get() : 3;
+	    int delayMs = (nonNull(retryDelay)) ? retryDelay.get() : 1000;
+	    String fullImageUrl = null;
+	    
+	    int retryCount = 0;
+
+	    while (retryCount <= retries) {
+	    	try {
+	    		fullImageUrl = buildImageUrl(
+		                msg.getCommandInfo().getBaseUrl(),
+		                msg.getSelection(),
+		                msg.getCommandInfo().getFileFormat());
+		        
+		        BufferedImage image = getImage(fullImageUrl, Optional.of(1), null, null);
+		        
+		        // As long as getImage is set this should not exit if statement
+		        if (image != null) {
+		            MessageBuilder newMsg = new MessageBuilder();
+		            EmbedBuilder newEmbed = new EmbedBuilder();
+		            
+		            if (fullImageUrl.contains(".gif")) {
+		                newEmbed.setImage(fullImageUrl);
+		            } else {
+		                newEmbed.setImage(image);
+		            }
+		            
+		            newEmbed.setColor(MSG_COLOR);
+		            newMsg.setEmbed(newEmbed);
+		            return newMsg;
+		        }
+		        
+		        retryCount++;
+		        
+		        if (retryCount <= retries) {
+		            try {
+		                Thread.sleep(delayMs);
+		            } catch (InterruptedException ignored) {
+		            }
+		        }
+	    	} catch (Exception e) {
+		        LOGGER.error("Failed getImage attempt {}/{} for {}", (retryCount + 1), retries, fullImageUrl);
+			}
+	    }
+
+	    throw new IOException("Failed to fetch build message after " + retries + " retries.");
 	}
 	
 	private String buildImageUrl(String baseUrl, int selectiom, String fileFormat) {
+		baseUrl = baseUrl.toLowerCase();
+		if(baseUrl.contains(IPFS_MAGIC_STRING)) baseUrl = baseUrl.replace(IPFS_MAGIC_STRING, IPFS_URLS[new Random().nextInt(IPFS_URLS.length)]);
 		return String.format("%s%s%s", baseUrl, selectiom, fileFormat);
 	}
 

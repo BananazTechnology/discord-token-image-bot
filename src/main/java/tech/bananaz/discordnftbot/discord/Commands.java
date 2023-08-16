@@ -2,6 +2,9 @@ package tech.bananaz.discordnftbot.discord;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.user.User;
@@ -11,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import tech.bananaz.discordnftbot.models.CustomCommand;
 import tech.bananaz.discordnftbot.models.EventMessage;
 import tech.bananaz.discordnftbot.utils.DiscordProperties;
@@ -26,8 +28,6 @@ public class Commands implements MessageCreateListener {
 	private static final Logger LOGGER  = LoggerFactory.getLogger(Commands.class);
 	private DiscordProperties config;
 	private ArrayList<CustomCommand> commands;
-	
-	public Commands() { }
 	
 	public Commands build(DiscordProperties config, ArrayList<CustomCommand> customInfo) {
 		this.config   = config;
@@ -61,7 +61,22 @@ public class Commands implements MessageCreateListener {
 						if(id >= 1 && c.getMax() >= id) {
 							e.setSelection(id);
 							e.setCommandInfo(c);
-							this.bot.sendEntry(e);
+
+							// Create an ExecutorService with a single thread
+				            ExecutorService executor = Executors.newSingleThreadExecutor();
+				            
+				            // Create a final copy of the variable 'e'
+				            EventMessage eCopy = new EventMessage();
+				            eCopy.setChannel(e.getChannel());
+				            eCopy.setUser(e.getUser());
+				            eCopy.setSelection(e.getSelection());
+				            eCopy.setCommandInfo(e.getCommandInfo());
+				            
+				            // Submit the CommandRunner for execution
+				            executor.submit(() -> {
+				            	this.bot.sendEntry(eCopy);
+				            });
+							
 							LOGGER.info("User {} requested an image!", sender.get().getDiscriminatedName());
 						}
 					} catch (Exception ex) {

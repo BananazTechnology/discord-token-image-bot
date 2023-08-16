@@ -31,15 +31,15 @@ nft-bot:
       command: "pixelgif"
       fileFormat: ".gif"
       max: 10000
-    - baseUrl: "https://ipfs.io/ipfs/bafybeidkqhbiyjlnnneab467eh2mabdf7lcdhmv6wgnd6peaq7hmfj3ez4/"
+    - baseUrl: "https://%ipfs%/ipfs/bafybeidkqhbiyjlnnneab467eh2mabdf7lcdhmv6wgnd6peaq7hmfj3ez4/"
       command: "fff"
       fileFormat: ".png"
       max: 10000
-    - baseUrl: "https://ipfs.io/ipfs/bafybeiep5n2kci72it4kny7rcvxryotlnp75ucz6wj4vkxu7orzkuqgbvu/"
+    - baseUrl: "https://%ipfs%/ipfs/bafybeiep5n2kci72it4kny7rcvxryotlnp75ucz6wj4vkxu7orzkuqgbvu/"
       command: "fff"
       fileFormat: ".png"
       max: 10000
-    - baseUrl: "https://ipfs.io/ipfs/bafybeih546bp5uwvco2zknvbpkmwds5l2q36yl6yq5vbdjjxdl55n6bvbq/"
+    - baseUrl: "https://%ipfs%/ipfs/bafybeih546bp5uwvco2zknvbpkmwds5l2q36yl6yq5vbdjjxdl55n6bvbq/"
       command: "fff"
       fileFormat: ".png"
       max: 10000
