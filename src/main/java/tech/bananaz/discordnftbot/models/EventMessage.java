@@ -4,8 +4,10 @@ import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.user.User;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Data
+@ToString(includeFieldNames = true)
 public class EventMessage {
 
 	ServerTextChannel channel;
